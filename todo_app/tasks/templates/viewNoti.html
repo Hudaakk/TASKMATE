@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Notifications</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f7f9fc;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Notifications List */
+        ul {
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        li {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        li:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        strong {
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        span {
+            display: block;
+            margin-top: 10px;
+            font-style: italic;
+            color: #777;
+        }
+
+        .task-info {
+            margin-top: 10px;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .task-info br {
+            margin-bottom: 5px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #1d78c1;
+        }
+
+        .read-status {
+            color: green;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            li {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+
+            button {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Your Notifications</h2>
+
+    {% if notifications %}
+        <ul>
+            {% for notification in notifications %}
+                <li>
+                    <strong>{{ notification.type }}</strong> - {{ notification.message }}
+                    <div class="task-info">
+                        {% if notification.task %}
+                            <p>Task: {{ notification.task.title }}</p>
+                            <p>Due Date: {{ notification.task.due_date }}</p>
+                        {% else %}
+                            <p>Task: No associated task</p>
+                        {% endif %}
+                    </div>
+                    <span>Created on: {{ notification.created_at }}</span>
+
+                    {% if not notification.read %}
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="notification_id" value="{{ notification.id }}">
+                            <button type="submit">Mark as Read</button>
+                        </form>
+                    {% else %}
+                        <span class="read-status">Read</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No new notifications.</p>
+    {% endif %}
+
+</body>
+</html>

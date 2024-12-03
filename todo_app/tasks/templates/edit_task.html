@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Task</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f4f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Form Styles */
+        form {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        div {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="datetime-local"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="datetime-local"]:focus,
+        textarea:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Custom Checkbox Styling */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-container label {
+            position: relative;
+            padding-left: 30px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .checkbox-container label::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            background-color: #fff;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .checkbox-container input[type="checkbox"]:checked + label::before {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+
+        .checkbox-container input[type="checkbox"]:checked + label::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 2px;
+        }
+
+        .checkbox-container input[type="checkbox"]:focus + label::before {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.5);
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #1d78c1;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 24px;
+            }
+
+            form {
+                padding: 20px;
+            }
+
+            input[type="text"],
+            input[type="datetime-local"],
+            textarea {
+                font-size: 14px;
+            }
+
+            button[type="submit"] {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div>
+        <h2>Edit Task</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div>
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" value="{{ task.title }}" required>
+            </div>
+            <div>
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required>{{ task.description }}</textarea>
+            </div>
+            <div>
+                <label for="due_date">Due Date:</label>
+                <input type="datetime-local" id="due_date" name="due_date" value="{{ task.due_date|date:"Y-m-d\TH:i" }}" required>
+            </div>
+            <div class="checkbox-container">
+                <input type="checkbox" id="completed" name="completed" {% if task.completed %}checked{% endif %}>
+                <label for="completed">Completed</label>
+            </div>
+            <div>
+                <button type="submit">Save Changes</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

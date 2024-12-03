@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7fa;
+            padding: 20px;
+        }
+
+        h2, h3 {
+            color: #333;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: #1273eb;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: flex-end; /* Aligns items to the right */
+            align-items: center;
+            border-radius: 5px;
+        }
+
+        .navbar .navbar-left {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: 5px;
+        }
+
+        .navbar a:hover {
+            background-color: #0a5ecb;
+        }
+
+        /* Task Cards */
+        .task-card {
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px 0;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .task-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .task-card h4 {
+            color: #333;
+            font-size: 18px;
+        }
+
+        .task-card p {
+            color: #555;
+            font-size: 14px;
+            margin: 8px 0;
+        }
+
+        .task-status {
+            font-weight: bold;
+            color: #2ecc71;
+        }
+
+        .task-status.pending {
+            color: #e74c3c;
+        }
+
+        /* Button Containers */
+        .task-card .button-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .task-card .button-container a {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 5px;
+            text-align: center;
+            width: 100px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Edit Button Styling */
+        .task-card .edit-button {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .task-card .edit-button:hover {
+            background-color: #1d78c1;
+        }
+
+        /* Delete Button Styling */
+        .task-card .delete-button {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .task-card .delete-button:hover {
+            background-color: #c0392b;
+        }
+
+        /* Empty message */
+        .empty-message {
+            text-align: center;
+            color: #888;
+            font-size: 16px;
+        }
+
+        /* Left-aligned Heading */
+        .heading-container {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+   
+    <div class="navbar">
+        <div class="navbar-left">
+            <h2 style="color: white;">Taskmate</h2>
+        </div>
+        <a href="{% url 'addTask' %}">Add New Task</a>
+        <a href="{% url 'viewNoti' %}">Notification</a>
+        <a href="{% url 'user_logout' %}">Logout</a>
+    </div>
+
+    <div class="heading-container">
+        <h2>Welcome to Your Task Dashboard</h2>
+    </div>
+
+    <h3>Your Tasks</h3>
+
+    <div class="task-list">
+        {% for task in tasks %}
+            <div class="task-card">
+                <h4>{{ task.title }}</h4>
+                <p><strong>Description:</strong> {{ task.description }}</p>
+                <p><strong>Due Date:</strong> {{ task.due_date }}</p>
+                <p><strong>Status:</strong> 
+                    <span class="task-status {% if task.completed %}completed{% else %}pending{% endif %}">
+                        {% if task.completed %} Completed {% else %} Pending {% endif %}
+                    </span>
+                </p>
+                <div class="button-container">
+                    <a class="edit-button" href="{% url 'edit_task' task.id %}">Edit</a>
+                    <a class="delete-button" href="{% url 'delete_task' task.id %}">Delete</a>
+                </div>
+            </div>
+        {% empty %}
+            <p class="empty-message">No tasks to display. Add a new task!</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
+    
